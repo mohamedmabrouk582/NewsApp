@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">News App</string>
+    <string name="socketTimeout">socketTimeout</string>
+    <string name="jsonError">jsonError</string>
+    <string name="connectionError">connectionError</string>
+    <string name="serverError">serverError</string>
+    <string name="no_data">No Data Found</string>
+    <string name="all_news">All News</string>
+    <string name="make_news_favorite">Make News favorite</string>
+    <string name="favorites">Favorites</string>
+</resources>
