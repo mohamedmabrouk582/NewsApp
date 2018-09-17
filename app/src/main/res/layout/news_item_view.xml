@@ -18,12 +18,25 @@
                  android:orientation="horizontal"
                  android:padding="@dimen/_5sdp"
                  >
-                 <ImageView
-                     android:scaleType="centerCrop"
+                 <FrameLayout
+
                      android:layout_width="@dimen/_100sdp"
-                     android:layout_height="@dimen/_110sdp"
-                     loadImage="@{news.urlToImage}"
-                     />
+                     android:layout_height="@dimen/_110sdp">
+
+                     <ImageView
+                         android:scaleType="centerCrop"
+                         android:layout_width="match_parent"
+                         android:layout_height="match_parent"
+                         loadImage="@{news.urlToImage}"
+                         />
+                     <ImageView
+                         android:src="@{news.isFav?@drawable/ic_like:@drawable/ic_un_like}"
+                         android:padding="@dimen/_5sdp"
+                         android:id="@+id/like"
+                         android:layout_width="@dimen/_40sdp"
+                         android:layout_height="@dimen/_40sdp" />
+                 </FrameLayout>
+
                  <LinearLayout
                      android:gravity="center|start"
                      android:layout_margin="@dimen/_5sdp"
@@ -47,6 +60,7 @@
                          android:text='@{"Time : "+news.publishedAt}'
                          />
                  </LinearLayout>
+
              </LinearLayout>
          </android.support.v7.widget.CardView>
 </layout>

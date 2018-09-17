@@ -11,9 +11,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import comnewsapp.example.moham.newsapp.data.model.NewsResponse;
 import comnewsapp.example.moham.newsapp.ui.NewsListFragment;
@@ -91,6 +94,8 @@ public class NewsListViewModel<v extends NewsListView> extends BaseViewModel<v> 
     }
 
 
+
+
     @Override
     public void reqAllNews(int page) {
         isPaging.set(true);
@@ -104,6 +109,15 @@ public class NewsListViewModel<v extends NewsListView> extends BaseViewModel<v> 
                             if (e.getArticles()==null ||e.getArticles().size()==0){
                                 onEmptyData(activity.getString(R.string.no_data));
                             }else {
+                                newsDao.getNews().observe(activity , n->{
+                                    for (News news:n) {
+                                        for (News d:e.getArticles()) {
+                                            if (d.getAuthor().equalsIgnoreCase(news.getAuthor()) && d.getTitle().equalsIgnoreCase(news.getTitle())){
+                                                d.setFav(true);
+                                            }
+                                        }
+                                    }
+                                });
                               getView().loadData(e.getArticles());
                             }
                         });
@@ -131,14 +145,22 @@ public class NewsListViewModel<v extends NewsListView> extends BaseViewModel<v> 
                 }));
     }
     public void insertAllNews(List<News> news){
+        for (News news1:news) {
+            news1.setFav(true);
+        }
         new InsertAllNews().execute(news);
     }
 
     public void favoritesNews(){
         isPaging.set(false);
-        newsDao.getNews().observe(activity, e->{
-                    Log.d("adadadad",e.toString());
-                    getView().loadData(e);
+        newsDao.getNews().observe(activity, e-> {
+                    Log.d("adadadad", e.toString());
+                    if (!isPaging.get()) {
+                        for (News news : e) {
+                            news.setFav(true);
+                        }
+                        getView().loadData(e);
+                    }
                 }
         );
     }
@@ -154,6 +176,15 @@ public class NewsListViewModel<v extends NewsListView> extends BaseViewModel<v> 
                                 onEmptyData(activity.getString(R.string.no_data));
                             }else {
                                 loading.set(false);
+                                newsDao.getNews().observe(activity , n->{
+                                    for (News news:n) {
+                                        for (News d:e.getArticles()) {
+                                            if (d.getAuthor().equalsIgnoreCase(news.getAuthor()) && d.getTitle().equalsIgnoreCase(news.getTitle())){
+                                                d.setFav(true);
+                                            }
+                                        }
+                                    }
+                                });
                                 getView().pagingData(e.getArticles());
                             }
                         });
@@ -185,6 +216,10 @@ public class NewsListViewModel<v extends NewsListView> extends BaseViewModel<v> 
                 }));
     }
 
+    public int deleteNews(News news) throws ExecutionException, InterruptedException {
+        return new DeleteNews().execute(news).get();
+    }
+
     public Long insertNews(News news) throws ExecutionException, InterruptedException {
         return new InsertNews().execute(news).get();
     }
@@ -192,6 +227,13 @@ public class NewsListViewModel<v extends NewsListView> extends BaseViewModel<v> 
         @Override
         protected Long doInBackground(News... news) {
             return newsDao.insertNews(news[0]);
+        }
+    }
+
+    public class DeleteNews extends AsyncTask<News,Void,Integer>{
+        @Override
+        protected Integer doInBackground(News... news) {
+            return newsDao.deleteNews(news[0]);
         }
     }
 

@@ -21,10 +21,11 @@ import java.util.Locale;
 
 import comnewsapp.example.moham.newsapp.BR;
 import comnewsapp.example.moham.newsapp.R;
+import comnewsapp.example.moham.newsapp.base.BaseModel;
 
 
 @Entity(tableName = "news",primaryKeys = {"author","title"})
-public class News extends BaseObservable{
+public class News extends BaseObservable implements BaseModel{
     @Embedded
     private Source source;
     @NonNull
@@ -34,8 +35,20 @@ public class News extends BaseObservable{
     private String description;
     private String url;
     private String urlToImage;
-    private String publishedAt;
+    public String publishedAt;
     private String content;
+    @Ignore
+    private boolean isFav;
+
+    @Bindable
+    public boolean isFav() {
+        return isFav;
+    }
+
+    public void setFav(boolean fav) {
+        isFav = fav;
+        notifyPropertyChanged(BR.fav);
+    }
 
     @Ignore
     @Override
@@ -160,5 +173,10 @@ public class News extends BaseObservable{
     public void setContent(String content) {
         this.content = content;
         notifyPropertyChanged(BR.content);
+    }
+
+    @Override
+    public int getViewType() {
+        return 1;
     }
 }

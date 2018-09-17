@@ -2,6 +2,6 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:title="@string/all_news" android:id="@+id/allNews" />
-    <item android:title="@string/make_news_favorite" android:id="@+id/makeFavorites" />
+    <!--<item android:title="@string/make_news_favorite" android:id="@+id/makeFavorites" />-->
     <item android:title="@string/favorites" android:id="@+id/Favorites"/>
 </menu>
