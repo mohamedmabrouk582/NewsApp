@@ -19,6 +19,7 @@ import comnewsapp.example.moham.newsapp.data.model.News;
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.Holder> {
     int pos;
+
     private List<News> data;
 
     public interface NewsListener {
